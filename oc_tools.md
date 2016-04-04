@@ -3,17 +3,17 @@ oC_Utilities are several "shortcuts" that helps me to administrate my oC
 
 ### List:
 
-oc_go-data
-oc_go-root
-oc_go-apache
-oc_email-list
-oc_last-seen
-oc_log-access
-oc_log-error
-oc_log-show
-oc_log-trim
-oc_occ
-oc_scan
+- oc_go-data
+- oc_go-root
+- oc_go-apache
+- oc_email-list
+- oc_last-seen
+- oc_log-access
+- oc_log-error
+- oc_log-show
+- oc_log-trim
+- oc_occ
+- oc_scan
 
 ## Codes:
 

@@ -1,4 +1,4 @@
-oC_Utilities are several "shortcuts" that helps me to administrate my oC
+'oC_Utilities are several "shortcuts" that helps me to administrate my oC
  
 
 ### List:
@@ -14,6 +14,13 @@ oC_Utilities are several "shortcuts" that helps me to administrate my oC
 - oc_log-trim
 - oc_occ
 - oc_scan
+- oc_use
+- oc_use-files
+- oc_use-cache
+- oc_use-version
+- oc_use-trashbin
+- oc_use-thumbnails
+- oc_use-external
 
 ## Codes:
 
@@ -66,7 +73,7 @@ tail -f -n 1000 /var/log/apache2/access.log
 ### oc_log-error
 ```
 #!/bin/bash
-grep -Ev '(level":0|level":1|level":22)' /mnt/owncloud/data/owncloud.log |more
+grep -Ev '(level":0|level":1|level":2)' /mnt/owncloud/data/owncloud.log |more
 ```
 
 ### oc_log-show
@@ -98,3 +105,65 @@ USER="--all"
 [[ $# == 1 ]] && USER=$1
 sudo -u www-data php /var/www/html/owncloud/occ files:scan $USER
 ```
+
+### oc_use
+```
+#!/bin/bash
+echo Use in the storage:
+echo
+oc_use-files
+echo
+oc_use-cache
+echo
+oc_use-version
+echo
+oc_use-trashbin
+echo
+oc_use-thumbnails
+echo
+oc_use-external
+
+```
+
+### oc_use-files
+```
+#!/bin/bash
+echo files:
+find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/files' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}' | numfmt --to=iec
+```
+
+### oc_use-cache
+```
+#!/bin/bash
+echo cache:
+find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/cache' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}'| numfmt --to=iec
+```
+
+### oc_use-version
+```
+#!/bin/bash
+echo files_versions:
+find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/files_versions' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}' | numfmt --to=iec
+```
+
+### oc_use-trashbin
+```
+#!/bin/bash
+echo files_trashbin:
+find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/files_trashbin' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}' | numfmt --to=iec
+```
+
+### oc_use-thumbnails
+```
+#!/bin/bash
+echo thumbnails:
+find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/thumbnails' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}' | numfmt --to=iec
+```
+
+### oc_use-external
+```
+#!/bin/bash
+echo files_external:
+find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/files_external' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}' | numfmt --to=iec
+```
+

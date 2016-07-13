@@ -129,41 +129,41 @@ oc_use-external
 ```
 #!/bin/bash
 echo files:
-find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/files' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}' | numfmt --to=iec
+find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/files' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}' | numfmt --from-unit=1024 --to=iec 
 ```
 
 ### oc_use-cache
 ```
 #!/bin/bash
 echo cache:
-find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/cache' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}'| numfmt --to=iec
+find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/cache' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}'| numfmt --from-unit=1024 --to=iec 
 ```
 
 ### oc_use-version
 ```
 #!/bin/bash
 echo files_versions:
-find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/files_versions' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}' | numfmt --to=iec
+find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/files_versions' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}' | numfmt --from-unit=1024 --to=iec 
 ```
 
 ### oc_use-trashbin
 ```
 #!/bin/bash
 echo files_trashbin:
-find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/files_trashbin' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}' | numfmt --to=iec
+find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/files_trashbin' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}' | numfmt --from-unit=1024 --to=iec 
 ```
 
 ### oc_use-thumbnails
 ```
 #!/bin/bash
 echo thumbnails:
-find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/thumbnails' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}' | numfmt --to=iec
+find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/thumbnails' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}' | numfmt --from-unit=1024 --to=iec 
 ```
 
 ### oc_use-external
 ```
 #!/bin/bash
 echo files_external:
-find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/files_external' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}' | numfmt --to=iec
+find /mnt/owncloud/data -maxdepth 2 -wholename '*/data/*/files_external' -print0 |xargs -r0 du --max-depth=0 -a| awk '{sum+=$1} END {print sum}' | numfmt --from-unit=1024 --to=iec 
 ```
 

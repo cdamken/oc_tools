@@ -1,0 +1,3 @@
+#! /bin/bash
+cd /var/www/owncloud
+sudo -u www-data php /var/www/owncloud/occ $@

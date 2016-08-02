@@ -1,0 +1,5 @@
+#!/bin/bash
+FILE="/mnt/owncloud/data/carlos/files/Documentos/email_list.txt"
+mysql -u root --password=Lu0r%VQg -e "SELECT configvalue FROM ocdamken.oc_preferences WHERE configkey = 'email'" > "$FILE"
+sed -i '/configvalue/d' -i ':a;N;$!ba;s/\n/; /g' "$FILE"
+chown www-data:www-data "$FILE"

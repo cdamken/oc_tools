@@ -1,0 +1,37 @@
+#!/bin/bash
+#Author: Caratsch Gianluca
+#Author: Carlos Damken
+#Version 0.5
+#Date: 21.07.2016
+#Description: This script is here to analyze the access log of ownCloud and should be used for debug reasons only.
+
+#Declaration of used variables
+accesslog=
+tmpfile=
+listofips=
+red=`tput setaf 1`
+reset=`tput sgr0`
+top10=
+username=
+
+#Used Access Log
+accesslog=/var/log/apache2/access.log
+echo -e "\nThis script will analyze the log file ${red}$accesslog${reset}.\n"
+
+#Temporary file
+tmpfile=/tmp/access_log_analyzer.log
+echo -e "Complete results will be stored in the file ${red}$tmpfile${reset}.\n"
+
+#Analyze access log
+echo -e "The current access log is being analyzed. This can take up to several minutes...\n"
+listofips=`cat $accesslog | awk '{ print $1 }' | sort | uniq -c > $tmpfile`
+
+echo -e "Top 10 connection IP adresses on this server are (number of connections + IP address):"
+sort -nr $tmpfile | head -n 10
+
+for client in `sort -nr $tmpfile | head -n 10 | awk '{ print $2 }'`
+do
+ username=`grep "$client" $accesslog | awk '{ print $3 }' | sort | uniq | tr -d - | xargs`
+ echo -e "\n$client ($username) used the following user agent(s):"
+ grep "$client" $accesslog | cut -d"\"" -f6 | sort | uniq | sed -r 's/-/Unknown User Agent/g'
+done

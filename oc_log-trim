@@ -1,0 +1,7 @@
+#!/bin/bash
+VERSION="/mnt/owncloud/data/owncloud.log"
+[[ $# == 1 ]] && VERSION=$VERSION"."$1
+sed -i '/level":0/d' "$VERSION"
+sed -i '/level":1/d' "$VERSION"
+sed -i '/level":2/d' "$VERSION"
+echo "Trimmed $VERSION"

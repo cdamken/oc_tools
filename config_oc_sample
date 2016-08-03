@@ -1,0 +1,10 @@
+#!/bin/bash
+
+oc_home_dir= 
+oc_data_dir=
+oc_admin_usr= 
+oc_apache_usr= 
+oc_db_usr= 
+oc_admin_pw= 
+oc_apache_pw= 
+oc_db_pw= 

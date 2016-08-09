@@ -1,5 +1,5 @@
 #!/bin/bash
-USER=$(mysql -u root --password=Lu0r%VQg -e "select uid from ocdamken.oc_users")
+USER=$(mysql -u root --password=xxxxx -e "select uid from ocdamken.oc_users")
 [[ $# == 1 ]] && USER=$1
   OLDIFS=$IFS
   IFS=$'\n'

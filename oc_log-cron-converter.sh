@@ -68,27 +68,33 @@ find "$OC_DATA_DIR" -type d -iname oc-logs -print | while read -r FOLDER; do
 	  echo "convert $Target"
 
 	  ## (C) 2017 carlos@owncloud.com
-	  #
-	  sed -i 's:\\\\\\\\:\\:g' "$Target"
-	  sed -i 's:\\\\\\:\\:g' "$Target"
-	  sed -i 's:\\\\:\\:g' "$Target"
+	  
+	  # Optimized the command. All seds in 1 line:
+	  
+	  # remove all extra backslashes \
+	  #sed -i 's:\\\\\\\\:\\:g' "$Target"
+ 	  #sed -i 's:\\\\\\:\\:g' "$Target"
+	  #sed -i 's:\\\\:\\:g' "$Target"
 
 	  # change \" to "
-	  sed -i 's:\\":":g' "$Target"
+	  #sed -i 's:\\":":g' "$Target"
 	  # change )\ to )
-	  sed -i 's:)\\:):g' "$Target"
+	  #sed -i 's:)\\:):g' "$Target"
 	  # change \/ to /
-	  sed -i 's:\\/:/:g' "$Target"
+	  #sed -i 's:\\/:/:g' "$Target"
 	  # add n to #0 -> n#0
-	  sed -i 's:#0:n#0:g' "$Target"
+	  #sed -i 's:#0:n#0:g' "$Target"
 	  # separate stack trace
-	  sed -i 's:n#:\n#:g' "$Target"
+	  #sed -i 's:n#:\n#:g' "$Target"
 	  # separating each stack trace with an extra line
-	  sed -i 's:{"reqId":\n{"reqId":g' "$Target"
+	  #sed -i '-e 'G' "$Target"
 
 	  # normal quotation
-	  sed -i 's:\\n:\n:g' "$Target"
-	  sed -i 's:\\t:\t:g' "$Target"
+	  #sed -i 's:\\n:\n:g' "$Target"
+	  #sed -i 's:\\t:\t:g' "$Target"
+
+	  sed -i -e 's:\\\\\\\\:\\:g' -e 's:\\\\\\:\\:g' -e 's:\\\\:\\:g' -e 's:\\":":g' -e  's:)\\:):g' -e 's:\\/:/:g' -e 'G' -e 's:#0:n#0:g' -e 's:n#:\n#:g'  -e  's:\\n:\n:g' -e 's:\\t:\t:g'  "$Target"
+
 
 	done
 

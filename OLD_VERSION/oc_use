@@ -1,0 +1,7 @@
+echo Usage in the storage:
+oc_use-files
+oc_use-cache
+oc_use-version
+oc_use-trashbin
+oc_use-thumbnails
+oc_use-external

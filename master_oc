@@ -5,7 +5,7 @@
 oc_credentials check
 VALID=$"(echo "$?")"
 
-if [ "$VALIDi" = "1" ]; then
+if [ $VALID = "1" ]; then
   tput setaf 1
   echo "One error with your credentias has occurred, Please run oc_cledentias to fix it!"
   tput sgr0
@@ -29,28 +29,10 @@ display_help() {
 }
     case "$1" in
       -h | -help | --help)
-          display_help 
+          display_help
           exit 0
           ;;
     esac
 # Help <--- End
 
-ALL_USERS=$(printf "select uid from %susers" "$DB_PREFIX")
-DBUSERS=$(mysql -u "$DB_USER" --password="$DB_PASSWORD" "$DB_NAME" -e "$ALL_USERS")
 
-[[ $# == 1 ]] && DBUSERS=$1
-
-  OLDIFS=$IFS
-  IFS=$'\n'
-    for CHECK_USER in $DBUSERS ; do
-      if [ "$CHECK_USER" != "uid" ] ; then
-        printf "Testing %s  --> " "$CHECK_USER"
-        LAST_SEEN=$(oc_occ user:lastseen "$CHECK_USER")
-        if [[ "$LAST_SEEN" == *"never"* ]] ; then
-          tput setaf 1
-        fi
-        printf " %s \n" "$LAST_SEEN"
-        tput sgr0
-      fi
-    done
-  IFS=$OLDIFS

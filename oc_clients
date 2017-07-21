@@ -1,0 +1,2 @@
+#! /bin/bash
+awk '{print $12" "$13" "$14" "$15" "$16" "$17" "$18}' /var/log/apache2/access.log*|sort|uniq -c|sort -n

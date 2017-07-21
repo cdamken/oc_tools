@@ -1,0 +1,5 @@
+#! /bin/bash
+cd /mnt/owncloud/data/carlos/files
+chown -R www-data:www-data oC-Logs
+cd /var/www/owncloud
+sudo -u www-data php /var/www/owncloud/occ file:scan -p carlos/files/oC-Logs

@@ -1,0 +1,17 @@
+#!/bin/bash
+USER=$(mysql -u root --password=xxxxx -e "select uid from ocdamken.oc_users")
+[[ $# == 1 ]] && USER=$1
+  OLDIFS=$IFS
+  IFS=$'\n'
+    for CHUSER in $USER ; do
+      if [ "$CHUSER" != "uid" ] ; then
+        printf "Testing %s  --> " "$CHUSER"
+        SEEN=$(sudo -u www-data php /var/www/html/owncloud/occ user:lastseen "$CHUSER")
+        if [[ "$SEEN" == *"never"* ]] ; then
+          tput setaf 1
+        fi
+        printf " %s \n" "$SEEN"
+        tput sgr0
+      fi
+    done
+  IFS=$OLDIFS

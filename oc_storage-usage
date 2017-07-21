@@ -1,0 +1,106 @@
+#!/bin/bash
+# TODO: Error Checks
+
+# Credentials file checker ---> Start
+oc_credentials check
+VALID=$(echo "$?")
+
+if [ $VALID = "1" ]; then
+  tput setaf 1
+  echo "One error with your credentias has occurred, Please run oc_cledentias to fix it!"
+  tput sgr0
+  exit 1
+fi
+
+CRED=~/.oC_credentials
+  # shellcheck source=~/.oC_credentials
+  . "$CRED"
+# Credentials file checker <--- End
+
+# Help ---> Start
+display_help() {
+    echo "Usage: $0 [user]" >&2
+    echo
+    echo "   -h, --help      This help output "
+    echo
+    exit 1
+}
+    case "$1" in
+      -h | -help | --help)
+          display_help
+          exit 0
+          ;;
+    esac
+# Help <--- End
+
+FC=$(printf "%sfilecache" "$DB_PREFIX") 
+ST=$(printf "%sstorages" "$DB_PREFIX") 
+MO=$(printf "%smounts" "$DB_PREFIX") 
+
+
+RESULTS=($("
+
+select 
+
+m.user_id, 
+fc.size, 
+s.id, 
+fc.name 
+
+from 
+
+
+oc_mounts m, 
+oc_filecache fc, 
+oc_storages s 
+
+where 
+
+m.mount_point=concat('/', m.user_id, '/') 
+
+and 
+
+s.numeric_id=m.storage_id 
+
+and 
+
+fc.storage=m.storage_id 
+
+and 
+
+fc.path='files';"))
+
+RESULTS=($(mysql -u "$DB_USER" --password="$DB_PASSWORD" "$DB_NAME" -se "select m.user_id, fc.size, s.id, fc.name from oc_mounts m, oc_filecache fc, oc_storages s where m.mount_point=concat('/', m.user_id, '/') and s.numeric_id=m.storage_id and fc.storage=m.storage_id and fc.path='files';"))
+
+OLDIFS=$IFS
+IFS=$'\n'
+
+cnt=${#RESULTS[@]}
+for (( i=0 ; i<cnt ; i++ ))
+do
+  XUSER=`echo "${RESULTS[$i]}" | awk -F$'\t' '{ print $1 }'`
+  B=`echo "${RESULTS[$i]}" | awk -F$'\t' '{ print $2 }'`
+  if [ $B -lt 1024 ]; then
+    SIZE="${B} bytes"
+  else
+    KB=$(((B+512)/1024))
+    if [ $KB -lt 1024 ]; then
+      SIZE="${KB} kilobytes"
+    else
+      MB=$(((KB+512)/1024))
+      if [ $MB -lt 1024 ]; then
+        SIZE="${MB} megabytes"
+      else
+        GB=$(((MB+512)/1024))
+        if [ $GB -lt 1024 ]; then
+         SIZE="${GB} gigabytes"
+        else
+          SIZE="$(((GB+512)/1024)) terabytes"
+        fi
+      fi
+    fi
+  fi
+  printf "$XUSER -> $SIZE\n" 
+done
+
+IFS=$OLDIFS

@@ -1,2 +1,2 @@
 #!/bin/bash
-grep -Ev '(level":0|level":1|level":22)' /mnt/owncloud/data/owncloud.log |more
+grep -Ev '(level":0|level":1|level":2)' /mnt/owncloud/data/owncloud.log |more

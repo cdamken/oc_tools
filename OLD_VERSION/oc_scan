@@ -1,0 +1,4 @@
+#!/bin/bash
+USER="--all"
+[[ $# == 1 ]] && USER=$1
+sudo -u www-data php /var/www/owncloud/occ files:scan $USER

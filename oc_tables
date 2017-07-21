@@ -1,0 +1,50 @@
+#!/bin/bash
+# TODO: Error Checks
+
+# Credentials file checker ---> Start
+oc_credentials check
+VALID=$(echo "$?")
+
+if [ $VALID = "1" ]; then
+  tput setaf 1
+  echo "One error with your credentias has occurred, Please run oc_cledentias to fix it!"
+  tput sgr0
+  exit 1
+fi
+
+CRED=~/.oC_credentials
+  # shellcheck source=~/.oC_credentials
+  . "$CRED"
+# Credentials file checker <--- End
+
+# Help ---> Start
+display_help() {
+    echo "Usage: $0 [table]" >&2
+    echo
+    echo "   -h, --help      This help output "
+    echo
+    echo "   [table]         diplays only the output from the selected table, no prefix needed"
+    echo
+    exit 1
+}
+    case "$1" in
+      -h | -help | --help)
+          display_help
+          exit 0
+          ;;
+    esac
+# Help <--- End
+
+OLDIFS=$IFS
+IFS=$'\n'
+SHOW_TABLES="$(printf "show tables from %s" "$DB_NAME")"
+TABLES=$(mysql -u "$DB_USER" --password="$DB_PASSWORD" -e "$SHOW_TABLES")
+[[ $# == 1 ]] && TABLES="$DB_PREFIX""$1"
+    for DESCRIBE in $TABLES ; do
+        printf "\n$DESCRIBE" "\n"
+        printf "\n"
+	DESCRIBED_DB="$(printf "describe %s.%s" "$DB_NAME" "$DESCRIBE")"
+	OUTPUT="$(mysql -u "$DBUSER" --password="$DB_PASSWORD" -t -e "$DESCRIBED_DB")"
+        printf "$OUTPUT\n" 
+    done
+IFS=$OLDIFS

@@ -1,0 +1,34 @@
+#!/bin/bash
+set -x
+# Usage: oc_log-read-convert Original_Log Target_Log 
+# in case target does not exist the filename will be Original.reformat.txt
+
+Origin="$1"
+Target=$Origin".converted.log"
+[[ $# == 2 ]] && Target="$2"
+
+cp "$Origin" "$Target"
+
+# remove all extra backslashes \
+#sed -i 's:\\\\\\\\:\\:g' "$Target"
+#sed -i 's:\\\\\\:\\:g' "$Target"
+#sed -i 's:\\\\:\\:g' "$Target"
+
+# change \" to "
+#sed -i 's:\\":":g' "$Target"
+# change )\ to )
+#sed -i 's:)\\:):g' "$Target"
+# change \/ to /
+#sed -i 's:\\/:/:g' "$Target"
+# add n to #0 -> n#0
+#sed -i 's:#0:n#0:g' "$Target"
+# separate stack trace
+#sed -i 's:n#:\n#:g' "$Target"
+# separating each stack trace with an extra line
+#sed -i '-e 'G' "$Target"
+
+# normal quotation
+#sed -i 's:\\n:\n:g' "$Target"
+#sed -i 's:\\t:\t:g' "$Target"
+
+sed -i -e 's:\\\\\\\\:\\:g' -e 's:\\\\\\:\\:g' -e 's:\\\\:\\:g' -e 's:\\":":g' -e  's:)\\:):g' -e 's:\\/:/:g' -e 'G' -e 's:#0:n#0:g' -e 's:n#:\n#:g'  -e  's:\\n:\n:g' -e 's:\\t:\t:g'  "$Target"

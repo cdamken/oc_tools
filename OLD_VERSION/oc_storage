@@ -1,0 +1,131 @@
+#!/bin/bash
+STORAGE=$(mysql -u root --password=xxxxx -e "select m.user_id, fc.size, s.id, fc.name from oc_mounts m, oc_filecache fc, oc_storages s where m.mount_point=concat('/', m.user_id, '/') and s.numeric_id=m.storage_id and fc.storage=m.storage_id and fc.path='files';")
+COUNTER=0
+for INPUT in $STORAGE ; do
+  printf "$COUNTER" "$STORAGE[$COUNTER]"
+  COUNTER=$COUNTER+1
+done
+
+
+mysql --user=root --password='' -e "SELECT GROUP_CONCAT(COLUMN_NAME SEPARATOR '\t') FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema='phineas_and_ferb' and table_name='characters' INTO OUTFILE '~/tmp/output.txt' FIELDS TERMINATED BY '\t' OPTIONALLY ENCLOSED BY '' ESCAPED BY '' LINES TERMINATED BY '\n';"
+
+#!/bin/bash
+USER=$(mysql -u root --password=xxxxx -e "select uid from ocdamken.oc_users")
+[[ $# == 1 ]] && USER=$1
+  OLDIFS=$IFS
+  IFS=$'\n'
+    for CHUSER in $USER ; do
+      if [ "$CHUSER" != "uid" ] ; then
+        printf "Testing %s  --> " "$CHUSER"
+        SEEN=$(sudo -u www-data php /var/www/html/owncloud/occ user:lastseen "$CHUSER")
+        if [[ "$SEEN" == *"never"* ]] ; then
+          tput setaf 1
+        fi
+        printf " %s \n" "$SEEN"
+        tput sgr0
+      fi
+    done
+  IFS=$OLDIFS
+
+
+select 
+      m.user_id, fc.size, s.id, fc.name 
+from 
+      oc_mounts m, oc_filecache fc, oc_storages s 
+where 
+      m.mount_point=concat('/', m.user_id, '/') 
+  and 
+      s.numeric_id=m.storage_id 
+  and 
+      fc.storage=m.storage_id 
+  and 
+      fc.path='files';
+
+      #!/bin/sh
+human_print(){
+while read B dummy; do
+  [ $B -lt 1024 ] && echo ${B} bytes && break
+  KB=$(((B+512)/1024))
+  [ $KB -lt 1024 ] && echo ${KB} kilobytes && break
+  MB=$(((KB+512)/1024))
+  [ $MB -lt 1024 ] && echo ${MB} megabytes && break
+  GB=$(((MB+512)/1024))
+  [ $GB -lt 1024 ] && echo ${GB} gigabytes && break
+  echo $(((GB+512)/1024)) terabytes
+done
+}
+
+echo 120928312 http://blah.com | human_print
+
+
+....
+
+
+That doesn't seem to work if the file has no extension, or no filename. Here is what I'm using; it only uses builtins and handles more (but not all) pathological filenames.
+
+#!/bin/bash
+for fullpath in "$@"
+do
+    filename="${fullpath##*/}"                      # Strip longest match of */ from start
+    dir="${fullpath:0:${#fullpath} - ${#filename}}" # Substring from 0 thru pos of filename
+    base="${filename%.[^.]*}"                       # Strip shortest match of . plus at least one non-dot char from end
+    ext="${filename:${#base} + 1}"                  # Substring from len of base thru end
+    if [[ -z "$base" && -n "$ext" ]]; then          # If we have an extension and no base, it's really the base
+        base=".$ext"
+        ext=""
+    fi
+
+    echo -e "$fullpath:\n\tdir  = \"$dir\"\n\tbase = \"$base\"\n\text  = \"$ext\""
+done
+
+And here are some testcases:
+
+$ basename-and-extension.sh / /home/me/ /home/me/file /home/me/file.tar /home/me/file.tar.gz /home/me/.hidden /home/me/.hidden.tar /home/me/.. .
+/:
+    dir  = "/"
+    base = ""
+    ext  = ""
+/home/me/:
+    dir  = "/home/me/"
+    base = ""
+    ext  = ""
+/home/me/file:
+    dir  = "/home/me/"
+    base = "file"
+    ext  = ""
+/home/me/file.tar:
+    dir  = "/home/me/"
+    base = "file"
+    ext  = "tar"
+/home/me/file.tar.gz:
+    dir  = "/home/me/"
+    base = "file.tar"
+    ext  = "gz"
+/home/me/.hidden:
+    dir  = "/home/me/"
+    base = ".hidden"
+    ext  = ""
+/home/me/.hidden.tar:
+    dir  = "/home/me/"
+    base = ".hidden"
+    ext  = "tar"
+/home/me/..:
+    dir  = "/home/me/"
+    base = ".."
+    ext  = ""
+.:
+    dir  = ""
+    base = "."
+    ext  = ""
+
+Instead of dir="${fullpath:0:${#fullpath} - ${#filename}}" I've often seen dir="${fullpath%$filename}"
+
+
+Replace all IP addresses in a file to a specified string
+sed -e 's/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/x.x.x.x/g' test.txt
+
+
+----
+
+
+sed -i -e 's:\\\\\\\\:\\:g' -e 's:\\\\\\:\\:g' -e 's:\\\\:\\:g' -e 's:\\":":g' -e  's:)\\:):g' -e 's:\\/:/:g' -e 's:#0:n#0:g' -e 's:n#:\n#:g'  -e  's:\\n:\n:g' -e 's:\\t:\t:g'

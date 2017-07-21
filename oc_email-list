@@ -1,5 +1,43 @@
 #!/bin/bash
+# TODO: Error Checks
+
+# Credentials file checker ---> Start
+oc_credentials check
+VALID=$"(echo "$?")"
+
+if [ "$VALID" = "1" ]; then
+  tput setaf 1
+  echo "One error with your credentias has occurred, Please run oc_cledentias to fix it!"
+  tput sgr0
+  exit 1
+fi
+
+CRED=~/.oC_credentials
+  # shellcheck source=~/.oC_credentials
+  . "$CRED"
+# Credentials file checker <--- End
+
+# Help ---> Start
+display_help() {
+    echo "Usage: $0 " >&2
+    echo
+    echo "   -h, --help      This help output "
+    echo
+    exit 1
+}
+    case "$1" in
+      -h | -help | --help)
+          display_help
+          exit 0
+          ;;
+    esac
+# Help <--- End
+
 FILE="/mnt/owncloud/data/carlos/files/Documentos/email_list.txt"
-mysql -u root --password=XXXX -e "SELECT configvalue FROM ocdamken.oc_preferences WHERE configkey = 'email'" > "$FILE"
-sed -i '/configvalue/d' -i ':a;N;$!ba;s/\n/; /g' "$FILE"
+
+DB_EMAILS="$(printf "select configvalue from %s.%spreferences where configkey = 'email'" "$DB_NAME" "$DB_PREFIX")"
+
+mysql -N -u "$DB_USER"  --password="$DB_PASSWORD" -e "$DB_EMAILS" > "$FILE"
+
+sed -i ':a;N;$!ba;s/\n/; /g' "$FILE" # Remove \n and concatenate with ;
 chown www-data:www-data "$FILE"

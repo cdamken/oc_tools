@@ -7,7 +7,7 @@ VALID=$(echo "$?")
 
 if [ $VALID = "1" ]; then
   tput setaf 1
-  echo "One error with your credentias has occurred, Please run oc_cledentias to fix it!"
+  echo "One error with your credentias has occurred, Please run oc_credentials to fix it!"
   tput sgr0
   exit 1
 fi

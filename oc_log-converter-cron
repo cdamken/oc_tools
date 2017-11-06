@@ -96,7 +96,7 @@ find "$OC_DATA_DIR"/*/files -maxdepth 2 -type d -iname oc-logs -print | while re
 	  #sed -i 's:\\n:\n:g' "$Target"
 	  #sed -i 's:\\t:\t:g' "$Target"
 
-	  sed -i -e 's:\\\\\\\\:\\:g' -e 's:\\\\\\:\\:g' -e 's:\\\\:\\:g' -e 's:\\":":g' -e  's:)\\:):g' -e 's:\\/:/:g' -e 's:#0:n#0:g' -e 's:n#:\n#:g' -e 's:{"reqId":\n{"reqId":g' -e  's:\\n:\n:g' -e 's:\\t:\t:g'  "$Target"
+	  sed -i -e 's:\\\\\\\\:\\:g' -e 's:\\\\\\:\\:g' -e 's:\\\\:\\:g' -e 's:\\":":g' -e 's:)\\:):g' -e 's:\\/:/:g' -e 's:#0:n#0:g' -e 's:n#:\n#:g' -e 's:{"reqId":\n{"reqId":g' -e 's:\\n:\n:g' -e 's:\\t:\t:g' -e 's:)n:)\n:g' "$Target"
 
 	done
 

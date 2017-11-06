@@ -31,4 +31,7 @@ cp "$Origin" "$Target"
 #sed -i 's:\\n:\n:g' "$Target"
 #sed -i 's:\\t:\t:g' "$Target"
 
-sed -i -e 's:\\\\\\\\:\\:g' -e 's:\\\\\\:\\:g' -e 's:\\\\:\\:g' -e 's:\\":":g' -e  's:)\\:):g' -e 's:\\/:/:g' -e 'G' -e 's:#0:n#0:g' -e 's:n#:\n#:g'  -e  's:\\n:\n:g' -e 's:\\t:\t:g'  "$Target"
+# LDAP tab cuts to other page
+#sed -i -e 's:)n:)\n:g' 
+
+sed -i -e 's:\\\\\\\\:\\:g' -e 's:\\\\\\:\\:g' -e 's:\\\\:\\:g' -e 's:\\":":g' -e 's:)\\:):g' -e 's:\\/:/:g' -e 'G' -e 's:#0:n#0:g' -e 's:n#:\n#:g' -e 's:\\n:\n:g' -e 's:\\t:\t:g' -e 's:)n:)\n:g' "$Target"
